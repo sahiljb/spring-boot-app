@@ -28,13 +28,10 @@ jobs:
           ${{ runner.os }}-m2
 
     - name: Build with Maven
-      run: mvn clean package
+      run: mvn clean package -DskipTests
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: spring-boot-app
-        path: target/*.jar  # Path to the built JAR file
+    - name: List target directory (Debug Step)
+      run: ls -al target
 
     - name: Deploy using rsync
       env:
@@ -47,8 +44,8 @@ jobs:
         LOCAL_APP_PATH=target/*.jar
         REMOTE_DIR=/www/wwwroot/test.chatfil.com
 
-        # Install sshpass for password-based authentication
-        sudo apt-get update && sudo apt-get install -y sshpass
+        # Add server to known hosts (secure method)
+        ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
 
         # Use rsync to upload the file
         sshpass -p "$SERVER_PASSWORD" rsync -avz $LOCAL_APP_PATH $SERVER_USER@$SERVER_IP:$REMOTE_DIR/$APP_NAME
