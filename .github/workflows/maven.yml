@@ -44,10 +44,10 @@ jobs:
         LOCAL_APP_PATH=target/$APP_NAME
         REMOTE_DIR=/www/wwwroot/test.chatfil.com
 
-        # Use rsync to upload the file, skipping host key check
-        sshpass -p "$SERVER_PASSWORD" rsync -avz -o StrictHostKeyChecking=no $LOCAL_APP_PATH $SERVER_USER@$SERVER_IP:$REMOTE_DIR/$APP_NAME
+        # Use rsync to upload the file with host key check disabled
+        sshpass -p "$SERVER_PASSWORD" rsync -avz -e "ssh -o StrictHostKeyChecking=no" $LOCAL_APP_PATH $SERVER_USER@$SERVER_IP:$REMOTE_DIR/$APP_NAME
 
-        # Restart the application on the server, skipping host key check
+        # Restart the application on the server
         sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
           cd $REMOTE_DIR
           pkill -f $APP_NAME || true
