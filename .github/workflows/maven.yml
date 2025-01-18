@@ -40,8 +40,8 @@ jobs:
         SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
       run: |
         # Define variables
-        APP_NAME=chatfill-bot-java.jar
-        LOCAL_APP_PATH=target/*.jar
+        APP_NAME=demo-0.0.1-SNAPSHOT.war
+        LOCAL_APP_PATH=target/$APP_NAME
         REMOTE_DIR=/www/wwwroot/test.chatfil.com
 
         # Add server to known hosts (secure method)
